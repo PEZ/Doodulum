@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+	layout="absolute" 
+	applicationComplete="start()" styleName="style">
+	<mx:Script>
+		<![CDATA[
+		    import shapes.Pendulum;
+			private var doodelums:Doodulums;
+
+			private function start():void {
+				doodelums = new Doodulums(this, width, height);
+				spriteContainer.addChild(doodelums);
+				update();
+			}
+			
+			private function toggleEngine() : void {
+			    doodelums.toggleEngine();
+			    update();
+			}
+			
+            private function update() : void {
+                if (doodelums) {
+                    doodelums.update(this);
+                    toggleButton.label = doodelums.engineActive ? "Stop" : "Start";
+                }
+            }
+            
+            public function activePendulumChanged(pendulum:Pendulum) : void {
+                pendulumSize.value = pendulum.mass;
+            }
+            private function resize() : void {
+                if (doodelums) {
+                    doodelums.scaleToFit(width, height);                    
+                }
+            }
+		]]>
+	</mx:Script>
+    <mx:Style source="styles.css"/>
+    <mx:UIComponent id="spriteContainer" bottom="46" top="0" click="return;doodelums.resetItemHandler(event);" left="0" right="0" resize="resize();"/>
+    <mx:Canvas height="28" bottom="10" left="10" right="10">
+        <mx:Button id="toggleButton" label="Start" click="toggleEngine();" right="0" top="0" height="24"/>
+        <mx:Label text="Weight:" width="56" y="2"  left="124" textAlign="right"/>
+        <mx:HSlider id="pendulumSize" allowTrackClick="true" minimum="1" maximum="35" change="update()" liveDragging="true" width="108" value="5" y="0" left="178"/>
+        <mx:Label text="Pen color:" y="3"  left="0" textAlign="right"/>
+        <mx:ColorPicker id="color" selectedColor="#1301BF" change="update()" y="0" x="62"/>
+    </mx:Canvas>
+</mx:Application>
